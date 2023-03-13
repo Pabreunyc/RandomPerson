@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RandomPerson.DbContent;
+using RandomPerson.Models;
 
 namespace RandomPerson
 {
@@ -13,65 +14,60 @@ namespace RandomPerson
     {
         static async Task Main(string[] args)
         {
-            List<object>    data = new List<object>();
-
-            MainLoop ml = new MainLoop("Glass", "A very fragile man");
-            
-            try
-            {
-                Console.WriteLine(Environment.NewLine + "Fac(8) = " + Factorial(8));
-            }
-            catch( Exception ex)
-            {
-                Console.Beep();
-                Console.Title = "Error!";
-                Console.WriteLine("Error:" + ex.ToString());
-                Environment.Exit(1);
-            }
+            List<ParkingPermitsQueue> data = new List<ParkingPermitsQueue>();
+            MainLoop ml = new MainLoop();
 
             try
             {
-                MySqlDb mySqlDb = new MySqlDb("MySqlOnUbbyHomeConnectionString");
+                MySqlDb mySqlDb = new MySqlDb("MySqlOnUbbyConnectionString");
                 var res = mySqlDb.GetMySqlReader("SELECT * FROM olmsted_SAHD_MDB.tbl_web_parking_permit_generate_queue ORDER BY queue_id DESC;");
 
-                //res.Read();
-                //object[] objs = new object[20];
                 int numFields = res.FieldCount;
-                //Console.WriteLine("numFields: {numFields}");
                 Console.WriteLine("Field count: {0}", numFields);
                 Console.WriteLine("===================================");
 
-                while( res.Read() )
+                //ParkingPermitsQueue pq = new ParkingPermitsQueue();
+                while (res.Read())
                 {
-                    object[] objs = new object[numFields];
-                    res.GetValues(objs);
-                    data.Add(objs);
-                    Console.WriteLine(objs[2].ToString());
+                    //object[] objs = new object[numFields];
+                    //res.GetValues(objs);
+                    //data.Add(objs);
+                    //Console.WriteLine(objs[2].ToString());
+
+                    //Console.WriteLine(res.GetFieldType(0));
+                    //Console.WriteLine(res.GetInt32("queue_id") + "::" + res.GetString(2));                    
+                    //Environment.NewLine
+                    ParkingPermitsQueue pq = new ParkingPermitsQueue
+                    {
+                        QueueId = res.GetInt32("queue_id"),
+                        Fullname = res.GetString("emp_full_name").ToString(),
+                        Email = res.GetString("emp_email").ToString(),
+                        DateRequested = res.GetDateTime("date_requested"),
+                        Processing = res.GetBoolean("processing")
+                    };
+                    data.Add(pq);
                 }
                 res.Close();
 
+                Console.WriteLine("===========");
                 Console.WriteLine("Records Found: " + data.Count);
-                //Console.WriteLine(data[0]);
-/*
-                foreach (object o in data)
-                {
-                    Console.WriteLine(o.ToString());
-                }
-*/
-            } catch( Exception ex )
+
+            }
+            catch (Exception ex)
             {
                 Console.Beep();
                 Console.Title = "DB Exception!";
-                Console.WriteLine(ex.ToString());   
+                Console.WriteLine(ex.ToString());
                 Environment.Exit(1);
             }
+
+            Timer timer1 = new Timer(ml.PrintTime, null, 1000, 1000);
+            Console.WriteLine("Running timed event. Enter to quit");
+            //timer1.Dispose();
+            
         }
 
-        private int StartUp(string[] cmdLine)
-        {
-
-            return 0;
-        }
+        
         public static int Factorial(int n)
         {
             if( n < 0 || n > 20 )
@@ -84,6 +80,7 @@ namespace RandomPerson
             return n * Factorial(n - 1);
         }
 
+       
         private void foo()
         {
             /*

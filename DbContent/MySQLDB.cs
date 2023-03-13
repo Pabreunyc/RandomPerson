@@ -43,6 +43,7 @@ namespace RandomPerson.DbContent
 
             return new MySqlCommand(query, Connection);
         }
+
     }
 
 }

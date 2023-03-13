@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,20 +14,23 @@ namespace RandomPerson
         public string name { get; set; }
         public string description { get; set; }
 
-        public MainLoop(string? name, string? description)
+        public MainLoop()
         {
-            this.name = name ?? "-Unknown-";
-            this.description = description ?? string.Empty;
+            
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stateInfo"></param>
+        public void PrintTime(Object stateInfo)
+        {
+            Console.WriteLine(DateAndTime.Now);
+        }
         /// <summary>
         ///   Get information about the current Main Loop
         /// </summary>
         /// <returns>string name & description</returns>
-        public string GetInfo() {
-            Console.WriteLine("Getting info");
-            Console.WriteLine("Locale:" + Globals.CODE_PREFIX);
-            return $"{name} {description}";
-        }
+
     }
 }
