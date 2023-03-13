@@ -13,6 +13,8 @@ namespace RandomPerson
     {
         static async Task Main(string[] args)
         {
+            List<object>    data = new List<object>();
+
             MainLoop ml = new MainLoop("Glass", "A very fragile man");
             
             try
@@ -27,9 +29,35 @@ namespace RandomPerson
                 Environment.Exit(1);
             }
 
-            MySqlDb mySqlDb = new MySqlDb("MySqlOnUbbyConnectionString");
-            var res = mySqlDb.GetMySqlReader("select * from olmsted_SAHD_MDB.tbl_web_parking_permit_generate_queue order by queue_id LIMIT 5 DESC;");
-            Console.WriteLine(res.ToString());
+            try
+            {
+                MySqlDb mySqlDb = new MySqlDb("MySqlOnUbbyHomeConnectionString");
+                var res = mySqlDb.GetMySqlReader("SELECT * FROM olmsted_SAHD_MDB.tbl_web_parking_permit_generate_queue ORDER BY queue_id DESC LIMIT 2;");
+                
+                //res.Read();
+                object[] objs = new object[20];
+                //int numFields = res.GetValues(objs);
+                //Console.WriteLine("numFields: {numFields}");
+
+                while( res.Read() )
+                {
+                    res.GetValues(objs);
+                    data.Add(objs);
+                }
+                res.Close();
+
+                Console.WriteLine("Records Found: " + data.Count);
+                foreach (object o in data)
+                {
+                    Console.WriteLine(o.ToString());
+                }
+            } catch( Exception ex )
+            {
+                Console.Beep();
+                Console.Title = "DB Exception!";
+                Console.WriteLine(ex.ToString());   
+                Environment.Exit(1);
+            }
         }
 
         private int StartUp(string[] cmdLine)
@@ -65,6 +93,13 @@ namespace RandomPerson
                 Console.WriteLine($"{firstName} {lastName}: {email}");           
             }
            */
+        }
+
+        private void goo(string message)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(goo));
+            Console.Write(value: "Goo says: '{message}");
+
         }
     }
 }

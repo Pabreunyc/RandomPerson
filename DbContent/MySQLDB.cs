@@ -16,10 +16,12 @@ namespace RandomPerson.DbContent
         public MySqlDb(string dbConnectionString)
         {
             dbConnectionString = dbConnectionString.Trim();
+            Console.WriteLine("MySqlDb: " + dbConnectionString);
             string connectionString = ConfigurationManager.ConnectionStrings[dbConnectionString].ConnectionString;
+            //string connectionString = ConfigurationManager.ConnectionStrings[dbConnectionString];
 
             Console.WriteLine("DB Connection String:" + connectionString);
-            Connection = new MySqlConnection(dbConnectionString);
+            Connection = new MySqlConnection(connectionString);
         }
 
         public MySqlDataReader GetMySqlReader(string query)
