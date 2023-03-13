@@ -32,25 +32,32 @@ namespace RandomPerson
             try
             {
                 MySqlDb mySqlDb = new MySqlDb("MySqlOnUbbyHomeConnectionString");
-                var res = mySqlDb.GetMySqlReader("SELECT * FROM olmsted_SAHD_MDB.tbl_web_parking_permit_generate_queue ORDER BY queue_id DESC LIMIT 2;");
-                
+                var res = mySqlDb.GetMySqlReader("SELECT * FROM olmsted_SAHD_MDB.tbl_web_parking_permit_generate_queue ORDER BY queue_id DESC;");
+
                 //res.Read();
-                object[] objs = new object[20];
-                //int numFields = res.GetValues(objs);
+                //object[] objs = new object[20];
+                int numFields = res.FieldCount;
                 //Console.WriteLine("numFields: {numFields}");
+                Console.WriteLine("Field count: {0}", numFields);
+                Console.WriteLine("===================================");
 
                 while( res.Read() )
                 {
+                    object[] objs = new object[numFields];
                     res.GetValues(objs);
                     data.Add(objs);
+                    Console.WriteLine(objs[2].ToString());
                 }
                 res.Close();
 
                 Console.WriteLine("Records Found: " + data.Count);
+                //Console.WriteLine(data[0]);
+/*
                 foreach (object o in data)
                 {
                     Console.WriteLine(o.ToString());
                 }
+*/
             } catch( Exception ex )
             {
                 Console.Beep();
