@@ -11,8 +11,8 @@ namespace RandomPerson
     {
         private int _id;
         private int _counter = 0;
-        public string name { get; set; }
-        public string description { get; set; }
+        public string? name { get; set; }
+        public string? description { get; set; }
 
         public MainLoop()
         {

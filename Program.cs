@@ -5,82 +5,32 @@ using System.Data;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using RandomPerson.DbContent;
-using RandomPerson.Models;
+
 
 namespace RandomPerson
 {
+    using DbContent;
+    using Models;
+    using Services;
+    
     class Program
     {
         static async Task Main(string[] args)
         {
-            List<ParkingPermitsQueue> data = new List<ParkingPermitsQueue>();
             MainLoop ml = new MainLoop();
 
-            try
-            {
-                MySqlDb mySqlDb = new MySqlDb("MySqlOnUbbyConnectionString");
-                var res = mySqlDb.GetMySqlReader("SELECT * FROM olmsted_SAHD_MDB.tbl_web_parking_permit_generate_queue ORDER BY queue_id DESC;");
+            ParkingPermitsService permitsService = new ParkingPermitsService();
+            Console.WriteLine("*");
+            int ql = permitsService.GetQueue();
+            Console.WriteLine("Queue Length:{0}", ql);
+            Console.WriteLine("Confirm Length: {0}", permitsService.GeQueueLength());
 
-                int numFields = res.FieldCount;
-                Console.WriteLine("Field count: {0}", numFields);
-                Console.WriteLine("===================================");
-
-                //ParkingPermitsQueue pq = new ParkingPermitsQueue();
-                while (res.Read())
-                {
-                    //object[] objs = new object[numFields];
-                    //res.GetValues(objs);
-                    //data.Add(objs);
-                    //Console.WriteLine(objs[2].ToString());
-
-                    //Console.WriteLine(res.GetFieldType(0));
-                    //Console.WriteLine(res.GetInt32("queue_id") + "::" + res.GetString(2));                    
-                    //Environment.NewLine
-                    ParkingPermitsQueue pq = new ParkingPermitsQueue
-                    {
-                        QueueId = res.GetInt32("queue_id"),
-                        Fullname = res.GetString("emp_full_name").ToString(),
-                        Email = res.GetString("emp_email").ToString(),
-                        DateRequested = res.GetDateTime("date_requested"),
-                        Processing = res.GetBoolean("processing")
-                    };
-                    data.Add(pq);
-                }
-                res.Close();
-
-                Console.WriteLine("===========");
-                Console.WriteLine("Records Found: " + data.Count);
-
-            }
-            catch (Exception ex)
-            {
-                Console.Beep();
-                Console.Title = "DB Exception!";
-                Console.WriteLine(ex.ToString());
-                Environment.Exit(1);
-            }
-
-            Timer timer1 = new Timer(ml.PrintTime, null, 1000, 1000);
-            Console.WriteLine("Running timed event. Enter to quit");
-            //timer1.Dispose();
-            
+            ParkingPermitsQueue p1 = permitsService.GetQueueItem(186);
+            Console.WriteLine("Found:" + p1.Fullname);
         }
 
         
-        public static int Factorial(int n)
-        {
-            if( n < 0 || n > 20 )
-                throw new ArgumentOutOfRangeException(nameof(n),
-                      "The valid range is between 0 and 20.");
-
-            if (n == 1 || n == 0)
-                return 1;
-
-            return n * Factorial(n - 1);
-        }
-
-       
+        
         private void foo()
         {
             /*
