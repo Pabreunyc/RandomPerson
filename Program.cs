@@ -24,9 +24,9 @@ namespace RandomPerson
             var x = ConfigurationManager.ConnectionStrings["MySqlOnUbbyConnectionString"];
             Console.WriteLine("Type:" + x.GetType());
             Console.WriteLine("x:" + x);
-            
 
-            string sAttr = ConfigurationManager.AppSettings.Get("Key0");
+
+            string sAttr = ConfigurationManager.AppSettings.Get("Key0") ?? "";
             Console.WriteLine(sAttr);
 
             /*
