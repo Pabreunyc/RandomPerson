@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RandomPerson
 {
-    internal static class Globals
+    public static class Globals
     {
         public const Int32 BUFFER_SIZE = 512; // Unmodifiable
         public static String FILE_NAME = "Output.txt"; // Modifiable

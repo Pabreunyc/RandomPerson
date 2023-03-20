@@ -19,15 +19,18 @@ namespace RandomPerson
         static async Task Main(string[] args)
         {
             MainLoop ml = new MainLoop();
+            ConfigServices configServices = new ConfigServices();
+            Console.WriteLine("Code Prefix:" + Globals.CODE_PREFIX);
+
             // https://stackoverflow.com/questions/65110479/how-to-get-values-from-appsettings-json-in-a-console-application-using-net-core?noredirect=1&lq=1
             //var x = ConfigurationManager.AppSettings.Get("connectionStrings");
-            var x = ConfigurationManager.ConnectionStrings["MySqlOnUbbyConnectionString"];
-            Console.WriteLine("Type:" + x.GetType());
-            Console.WriteLine("x:" + x);
+            //var x = ConfigurationManager.ConnectionStrings["MySqlOnUbbyConnectionString"];
+            //Console.WriteLine("Type:" + x.GetType());
+            //Console.WriteLine("x:" + x);
 
 
-            string sAttr = ConfigurationManager.AppSettings.Get("Key0") ?? "";
-            Console.WriteLine(sAttr);
+            //string sAttr = ConfigurationManager.AppSettings.Get("Key0") ?? "";
+            //Console.WriteLine(sAttr);
 
             /*
                         ParkingPermitsService permitsService = new ParkingPermitsService();
@@ -40,7 +43,7 @@ namespace RandomPerson
                         Console.WriteLine("Found:" + p1.Fullname);
             */
 
-
+            Console.ResetColor();
         }
 
         
